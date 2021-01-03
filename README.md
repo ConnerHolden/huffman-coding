@@ -1,7 +1,7 @@
 # Table of Contents
 
 [*Introduction*](#introduction)  
-[*What is Huffman Coding?*](#what_is_huffman_coding?)
+[*What is Huffman Coding?*](#what-is-huffman-coding?)
 
 ## Introduction
 
