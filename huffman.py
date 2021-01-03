@@ -73,7 +73,53 @@ def count_freq():
     return ordered_freq
 
 
-list(ordered_freq.values)
+def more_than_one(dictionary):
+    try:
+        return bool(list(dictionary)[1])
+    except:
+        return False
+
+
+feeder_dict = OrderedDict()
+
+
+def huffman_tree():
+    while ordered_freq:
+        for key, value in ordered_freq.items():
+            if not feeder_dict:
+                # TODO merge list(ordered_freq)[0] and list(ordered_freq)[1]
+                # TODO feeder_dict.update(merged item)
+                # TODO remove unmerged items from dict
+            else:
+                if more_than_one(ordered_freq):
+                    if int(list(feeder_dict)[0]) <= int(list(ordered_freq)[0]) or int(list(ordered_freq)[1]):
+                        # TODO merge list(feeder_dict)[0] and list(ordered_freq)[0]
+                        # TODO feeder_dict.update(merged item)
+                        # TODO remove unmerged items from dict
+                    else:
+                        # TODO merge list(ordered_freq)[0] and list(ordered_freq)[1]
+                        # TODO feeder_dict.update(merged item)
+                        # TODO remove unmerged items from dict
+                else:
+                    # TODO merge list(feeder_dict)[0] and list(ordered_freq)[0]
+                    # TODO feeder_dict.update(merged item)
+                    # TODO remove unmerged items from dict
+    else:
+        # TODO merge list(feeder_dict)[0] and list(feeder_dict)[1]
+        # TODO feeder_dict.update(merged item)
+        # TODO remove unmerged items from dict
+
+
+test_dict = OrderedDict([("a", "1"), ("c", "3")])
+res1 = not bool(test_dict)
+res2 = not test_dict
+
+
+# while not test_dict:
+#     print(str(res1) + str(res2))
+
+
+# list(ordered_freq.values)
 
 # def dict_to_list():
 #     new_list = []
@@ -87,8 +133,8 @@ list(ordered_freq.values)
 
 
 # print(load_file())
-print(count_freq())
 # print(dict_to_list())
+print(count_freq())
 
 # count = 1
 
