@@ -14,8 +14,11 @@ feeder_dict = OrderedDict([("", 0)])
 # bit_dict = {[("a", 110), ("h", 100), ("b", 01)]}
 bit_dict = OrderedDict()
 
-# TODO: Alters the target file directly. Add method later for copying target file.
-# file_name = str(input("Input file name:"))
+bit_counter = 0
+ordered_freq_counter = 0
+feeder_dict_counter = 1
+feeder_dict_index = 0
+
 file_name = "test.txt"
 
 
@@ -29,9 +32,6 @@ def load_file():
 def copy_file():
     copied_file = load_file()
     return copied_file
-
-
-# def write_file():
 
 
 def count_freq():
@@ -86,80 +86,60 @@ def continue_building():
         return False
 
 
-def update_feeder_dict(dict1, i1, dict2, i2):
-    feeder_dict[
-        f"{list(dict1)[i1]}{list(dict2)[i2]}"
-    ] = f"{int(list(dict1.values())[i1]) + int(list(dict2.values())[i2])}"
+class Feeder:
+    def __init__(self, dict1, i1, dict2, i2):
+        self.update_feeder_dict(dict1, i1, dict2, i2)
+        self.assign_bit_code(dict1, i1)
+        self.assign_bit_code(dict2, i2)
+        self.feeder_counter(dict1, dict2)
 
+    def update_feeder_dict(self, dict1, i1, dict2, i2):
+        feeder_dict[
+            f"{list(dict1)[i1]}{list(dict2)[i2]}"
+        ] = f"{int(list(dict1.values())[i1]) + int(list(dict2.values())[i2])}"
 
-def assign_new_bit_code(key, code):
-    bit_dict.update({f"{key}": f"{code}"})
+    def assign_bit_code(self, dict, i):
+        counter = 0
+        global bit_counter
+        for character in list(dict)[i]:
+            if character in bit_dict:
+                bit_dict.update(
+                    {f"{character}": f"{bit_counter % 2}{bit_dict[character]}"}
+                )
+            else:
+                bit_dict.update({f"{character}": f"{bit_counter % 2}"})
+            counter += 1
+        counter = 0
+        bit_counter += 1
+        if bit_counter % 2 == 0:
+            bit_counter = 0
 
-
-bit_counter = 0
-
-
-def assign_bit_code(dict, i):
-    counter = 0
-    global bit_counter
-    for character in list(dict)[i]:
-        if character in bit_dict:
-            bit_dict.update({f"{character}": f"{bit_counter % 2}{bit_dict[character]}"})
+    def feeder_counter(self, dict1, dict2):
+        global ordered_freq_counter
+        global feeder_dict_counter
+        global feeder_dict_index
+        if dict1 == ordered_freq:
+            ordered_freq_counter += 1
+            feeder_dict_index += 1
         else:
-            assign_new_bit_code(character, bit_counter % 2)
-        counter += 1
-    counter = 0
-    bit_counter += 1
-    if bit_counter % 2 == 0:
-        bit_counter = 0
+            feeder_dict_counter += 1
+            feeder_dict_index += 1
+        if dict2 == ordered_freq:
+            ordered_freq_counter += 1
+        else:
+            feeder_dict_counter += 1
 
 
-def del_dict_items(dict1, i1, dict2, i2):
-    del dict1[list(dict1)[i1]]
-    if dict2 == dict1:
-        del dict2[list(dict2)[i1]]
-    else:
-        del dict2[list(dict2)[i2]]
-
-
-ordered_freq_counter = 0
-feeder_dict_counter = 1
-feeder_dict_index = 0
-
-
-def feeder_counter(dict1, dict2):
-    global ordered_freq_counter
-    global feeder_dict_counter
-    global feeder_dict_index
-
-    if dict1 == ordered_freq:
-        ordered_freq_counter += 1
-        feeder_dict_index += 1
-    else:
-        feeder_dict_counter += 1
-        feeder_dict_index += 1
-    if dict2 == ordered_freq:
-        ordered_freq_counter += 1
-    else:
-        feeder_dict_counter += 1
-
-
-def feeder(dict1, i1, dict2, i2):
-    update_feeder_dict(dict1, i1, dict2, i2)
-    assign_bit_code(dict1, i1)
-    assign_bit_code(dict2, i2)
-    feeder_counter(dict1, dict2)
-
-
+# TODO: prefixes are not unique :(
 def huffman_tree():
     global ordered_freq_counter
     global feeder_dict_counter
     global feeder_dict_index
 
     for key, value in ordered_freq.items():
-        if continue_building() or (len(list(feeder_dict)) == (1 or 2)):
+        if continue_building() or (len(list(feeder_dict)) == 1):
             if len(list(feeder_dict)) == 1:
-                feeder(
+                Feeder(
                     ordered_freq,
                     ordered_freq_counter,
                     ordered_freq,
@@ -179,14 +159,14 @@ def huffman_tree():
                             ordered_freq[list(ordered_freq)[ordered_freq_counter + 1]]
                         )
                     ):
-                        feeder(
+                        Feeder(
                             feeder_dict,
                             feeder_dict_counter,
                             ordered_freq,
                             ordered_freq_counter,
                         )
                     else:
-                        feeder(
+                        Feeder(
                             ordered_freq,
                             ordered_freq_counter,
                             ordered_freq,
@@ -194,14 +174,14 @@ def huffman_tree():
                         )
                 else:
                     if ordered_freq_counter != len(list(ordered_freq)):
-                        feeder(
+                        Feeder(
                             feeder_dict,
                             feeder_dict_counter,
                             ordered_freq,
                             ordered_freq_counter,
                         )
                     else:
-                        feeder(
+                        Feeder(
                             feeder_dict,
                             feeder_dict_counter,
                             feeder_dict,
@@ -211,65 +191,27 @@ def huffman_tree():
             break
 
 
-def write_huffman():
+def return_huffman_integer():
     copied_file = copy_file()
     copied_file = list(copied_file)
     for index, item in enumerate(copied_file):
         for key, value in bit_dict.items():
             if item == key:
                 copied_file[index] = value
-    return "".join(copied_file)
+    copied_file = "".join(copied_file)
+    huffman_integer = int(copied_file, 2)
+    return huffman_integer
 
 
-def binstr_to_int():
-    return int(write_huffman(), 2)
-
-
-# def conversion():
-#     string = load_test()
-#     string = list(string)
-#     for index, item in enumerate(string):
-#         for key, value in bit_dict.items():
-#             if item == key:
-#                 string[index] = value
-#     return "".join(string)
-
-
-# write test.txt to new file in huffman codes, then convert to int, then write that
-
-
-# print(count_freq())
-# print(ordered_freq_counter + 1)
-# feeder(ordered_freq, ordered_freq_counter, ordered_freq, ordered_freq_counter + 1)
-# print(ordered_freq)
-# print(feeder_dict)
-# print(bit_dict)
-# feeder(ordered_freq, ordered_freq_counter, feeder_dict, feeder_dict_counter)
-# print(ordered_freq)
-# print(feeder_dict)
-# print(bit_dict)
-# feeder(ordered_freq, ordered_freq, feeder_dict, feeder_dict_counter)
-# print(ordered_freq)
-# print(feeder_dict)
-# print(bit_dict)
+def write_bin(name="test.pickle"):
+    pickling_on = open(name, "wb")
+    pickle.dump(return_huffman_integer(), pickling_on)
+    pickling_on.close()
 
 
 print(count_freq())
 huffman_tree()
-print(ordered_freq)
 print(feeder_dict)
 print(bit_dict)
-print(write_huffman())
-print(binstr_to_int())
-# print(copy_file(load_file()))
-pickling_on = open("test.pickle", "wb")
-pickle.dump(binstr_to_int(), pickling_on)
-pickling_on.close()
-# def load_test():
-#     with open("testcopy.txt", mode="r") as file:
-#         file_contents_list = file.readlines()
-#         testcopy = "".join(file_contents_list)
-#         return testcopy
-
-
-# print(conversion())
+print(return_huffman_integer())
+write_bin()
