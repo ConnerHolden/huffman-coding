@@ -13,10 +13,10 @@ all_freq = {}
 # ordered_freq = {[("a", "23"), ("h", "48"), ("b", "62")]}
 ordered_freq = OrderedDict()
 
-# feeder_dict = {[("ah", 71)]}
-feeder_dict = OrderedDict([("", 0)])
+# feeder_dict = {[("ah", "71")]}
+feeder_dict = OrderedDict([("", "0")])
 
-# bit_dict = {[("a", 110), ("h", 100), ("b", 01)]}
+# bit_dict = {[("a", "110"), ("h", "100"), ("b", "01")]}
 bit_dict = OrderedDict()
 
 bit_counter = 0
@@ -33,8 +33,6 @@ def load_file(target):
 
 
 def count_freq(target):
-    global ordered_freq
-    global all_freq
     string = load_file(target)
     count = 1
 
@@ -69,7 +67,6 @@ def continue_building():
 
 
 def freq(dict):
-    # dict_counter = f"{dict}_counter" if dict_counter is None else dict_counter
     if dict == feeder_dict:
         dict_counter = feeder_dict_counter
     else:
@@ -123,10 +120,6 @@ class Feeder:
 
 # TODO: prefixes are not unique :(
 def huffman_tree():
-    global ordered_freq_counter
-    global feeder_dict_counter
-    global feeder_dict_index
-
     for key, value in ordered_freq.items():
         feeder_len = len(list(feeder_dict))
         ordered_len = len(list(ordered_freq))
