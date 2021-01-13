@@ -91,6 +91,15 @@ def continue_building():
         return False
 
 
+def freq(dict):
+    # dict_counter = f"{dict}_counter" if dict_counter is None else dict_counter
+    if dict == feeder_dict:
+        dict_counter = feeder_dict_counter
+    else:
+        dict_counter = ordered_freq_counter
+    return int(dict[list(dict)[dict_counter]])
+
+
 class Feeder:
     def __init__(self, dict1, i1, dict2, i2):
         self.update_feeder_dict(dict1, i1, dict2, i2)
@@ -141,14 +150,11 @@ def huffman_tree():
     global feeder_dict_counter
     global feeder_dict_index
 
-    feeder_len = len(list(feeder_dict))
-    ordered_len = len(list(ordered_freq))
-    feeder_key_freq = int(feeder_dict[list(feeder_dict)[feeder_dict_counter]])
-    ordered_key_freq = int(ordered_freq[list(ordered_freq)[ordered_freq_counter]])
-
     for key, value in ordered_freq.items():
-        if continue_building() or (len(list(feeder_dict)) == 1):
-            if len(list(feeder_dict)) == 1:
+        feeder_len = len(list(feeder_dict))
+        ordered_len = len(list(ordered_freq))
+        if continue_building() or feeder_len == 1:
+            if feeder_len == 1:
                 Feeder(
                     ordered_freq,
                     ordered_freq_counter,
@@ -156,18 +162,9 @@ def huffman_tree():
                     ordered_freq_counter + 1,
                 )
             else:
-                if ordered_freq_counter >= 1 and ordered_freq_counter != len(
-                    list(ordered_freq)
-                ):
-                    if int(
-                        feeder_dict[list(feeder_dict)[feeder_dict_counter]]
-                    ) != 0 and int(
-                        feeder_dict[list(feeder_dict)[feeder_dict_counter]]
-                    ) <= (
-                        int(ordered_freq[list(ordered_freq)[ordered_freq_counter]])
-                        or int(
-                            ordered_freq[list(ordered_freq)[ordered_freq_counter + 1]]
-                        )
+                if ordered_freq_counter >= 1 and ordered_freq_counter != ordered_len:
+                    if freq(feeder_dict) != 0 and freq(feeder_dict) <= (
+                        freq(ordered_freq) or freq(ordered_freq) + 1
                     ):
                         Feeder(
                             feeder_dict,
@@ -183,7 +180,7 @@ def huffman_tree():
                             ordered_freq_counter + 1,
                         )
                 else:
-                    if ordered_freq_counter != len(list(ordered_freq)):
+                    if ordered_freq_counter != ordered_len:
                         Feeder(
                             feeder_dict,
                             feeder_dict_counter,
