@@ -1,5 +1,10 @@
 from collections import OrderedDict
 import pickle
+import time
+from os import system
+from sys import getsizeof
+import timeit
+import sys
 
 
 # all_freq = {[("a", "23"), ("b", "62"), ("h", "48")]}
@@ -19,7 +24,7 @@ ordered_freq_counter = 0
 feeder_dict_counter = 1
 feeder_dict_index = 0
 
-file_name = "test.txt"
+file_name = "test2.txt"
 
 
 def load_file():
@@ -136,6 +141,11 @@ def huffman_tree():
     global feeder_dict_counter
     global feeder_dict_index
 
+    feeder_len = len(list(feeder_dict))
+    ordered_len = len(list(ordered_freq))
+    feeder_key_freq = int(feeder_dict[list(feeder_dict)[feeder_dict_counter]])
+    ordered_key_freq = int(ordered_freq[list(ordered_freq)[ordered_freq_counter]])
+
     for key, value in ordered_freq.items():
         if continue_building() or (len(list(feeder_dict)) == 1):
             if len(list(feeder_dict)) == 1:
@@ -198,8 +208,29 @@ def return_huffman_integer():
         for key, value in bit_dict.items():
             if item == key:
                 copied_file[index] = value
+                break
+        if index % 1000 == 0:
+            completion = 100 * index / len(copied_file)
+            print("{:.3f}% ({}/{})".format(completion, index, len(copied_file)))
+            time.sleep(0.001)
+        # if index % 20 == 0:
+        #     completion = int(20 * index / len(copied_file))
+        #     sys.stdout.write("\r[%s%s]" % ("#" * completion, " " * (20 - completion)))
+        #     sys.stdout.flush()
+
+    # huffman_binary = ""
+    # huffman_binary = str(
+    #     (huffman_binary + value for item in copied_file if key == item)
+    #     for key, value in bit_dict.items()
+    # )
+    # system("clear")
+    # print("{:.3f}%".format(completion))
+    # time.sleep(0.000001)
     copied_file = "".join(copied_file)
     huffman_integer = int(copied_file, 2)
+    # print(huffman_integer)
+    # print(huffman_binary)
+    # huffman_integer = int(huffman_binary, 2)
     return huffman_integer
 
 
@@ -213,5 +244,7 @@ print(count_freq())
 huffman_tree()
 print(feeder_dict)
 print(bit_dict)
-print(return_huffman_integer())
-write_bin()
+# return_huffman_integer()
+# write_bin()
+elapsed_time = timeit.timeit(write_bin, number=1)
+print(elapsed_time)
