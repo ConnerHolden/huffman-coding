@@ -24,25 +24,18 @@ ordered_freq_counter = 0
 feeder_dict_counter = 1
 feeder_dict_index = 0
 
-file_name = "test2.txt"
 
-
-def load_file():
-    with open(file_name, mode="r") as file:
+def load_file(target):
+    with open(target, mode="r") as file:
         file_contents_list = file.readlines()
         file_contents = "".join(file_contents_list)
         return file_contents
 
 
-def copy_file():
-    copied_file = load_file()
-    return copied_file
-
-
-def count_freq():
+def count_freq(target):
     global ordered_freq
     global all_freq
-    string = load_file()
+    string = load_file(target)
     count = 1
 
     for i in string:
@@ -61,22 +54,6 @@ def count_freq():
         count += 1
 
     return ordered_freq
-
-
-def more_than_one(dictionary):
-    try:
-        return bool(list(dictionary)[1])
-    except IndexError:
-        return False
-
-
-def check_repeating(string):
-    for character in string:
-        string_check = string.replace(character, "")
-        if character in string_check:
-            return False
-        else:
-            return True
 
 
 def continue_building():
@@ -198,50 +175,33 @@ def huffman_tree():
             break
 
 
-def return_huffman_integer():
-    copied_file = copy_file()
-    copied_file = list(copied_file)
-    for index, item in enumerate(copied_file):
+def return_huffman_integer(target):
+    file = load_file(target)
+    file = list(file)
+    for index, item in enumerate(file):
         for key, value in bit_dict.items():
             if item == key:
-                copied_file[index] = value
+                file[index] = value
                 break
         if index % 1000 == 0:
-            completion = 100 * index / len(copied_file)
-            print("{:.3f}% ({}/{})".format(completion, index, len(copied_file)))
+            completion = 100 * index / len(file)
+            print("{:.3f}% ({}/{})".format(completion, index, len(file)))
             time.sleep(0.001)
         # if index % 20 == 0:
-        #     completion = int(20 * index / len(copied_file))
+        #     completion = int(20 * index / len(file))
         #     sys.stdout.write("\r[%s%s]" % ("#" * completion, " " * (20 - completion)))
         #     sys.stdout.flush()
-
-    # huffman_binary = ""
-    # huffman_binary = str(
-    #     (huffman_binary + value for item in copied_file if key == item)
-    #     for key, value in bit_dict.items()
-    # )
-    # system("clear")
-    # print("{:.3f}%".format(completion))
-    # time.sleep(0.000001)
-    copied_file = "".join(copied_file)
-    huffman_integer = int(copied_file, 2)
-    # print(huffman_integer)
-    # print(huffman_binary)
-    # huffman_integer = int(huffman_binary, 2)
+    file = "".join(file)
+    huffman_integer = int(file, 2)
     return huffman_integer
 
 
-def write_bin(name="test.pickle"):
-    pickling_on = open(name, "wb")
-    pickle.dump(return_huffman_integer(), pickling_on)
+def write_bin(target="test.txt", destination="test.pickle"):
+    count_freq(target)
+    huffman_tree()
+    pickling_on = open(destination, "wb")
+    pickle.dump(return_huffman_integer(target), pickling_on)
     pickling_on.close()
 
 
-print(count_freq())
-huffman_tree()
-print(feeder_dict)
-print(bit_dict)
-# return_huffman_integer()
-# write_bin()
-elapsed_time = timeit.timeit(write_bin, number=1)
-print(elapsed_time)
+write_bin()
