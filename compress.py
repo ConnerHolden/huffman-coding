@@ -5,6 +5,7 @@ from os import system
 from sys import getsizeof
 from timeit import default_timer as timer
 import sys
+import getopt
 
 
 # Unordered frequency of every character in a file.
@@ -250,7 +251,7 @@ def return_huffman_integer(target):
     return huffman_integer
 
 
-def write_bin(target="test.txt", destination="test.pickle"):
+def write_bin(target="test.txt", destination="test.dat"):
     """Writes <huffman_integer> and its <bit_dict> (so it can be decompressed later) to a new binary file."""
     count_freq(target)
     huffman_tree()
@@ -260,7 +261,27 @@ def write_bin(target="test.txt", destination="test.pickle"):
     pickling_on.close()
 
 
-start = timer()
-write_bin("test.txt")
-end = timer()
-print("\nruntime: {:.2f}s".format(end - start))
+def main(argv):
+    target = ""
+    destination = ""
+    try:
+        opts, args = getopt.getopt(argv,"ht:d:",["tfile=","dfile="])
+    except getopt.GetoptError:
+        print("compress.py -t <targetfile> -d <destinationfile>")
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print("compress.py -t <targetfile> -d <destinationfile>")
+            sys.exit()
+        elif opt in ("-t", "--tfile"):
+            targetfile = arg
+        elif opt in ("-d", "--dfile"):
+            destinationfile = arg
+    start = timer()
+    write_bin(targetfile, destinationfile)
+    end = timer()
+    print("\nruntime: {:.2f}s".format(end - start))
+
+
+if __name__ == "__main__":
+   main(sys.argv[1:])

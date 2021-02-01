@@ -3,17 +3,10 @@ from functools import reduce
 import time
 import sys
 from timeit import default_timer as timer
+import getopt
 
 
-def format_output(input):
-    output = str(input)
-    if len(output) > 50:
-        return f"{output[0:25]} ... {output[-24:]} {type(input)}"
-    else:
-        return f"{output} {type(input)}"
-
-
-def read_bin(target="test.pickle", destination="testcompare.txt"):
+def read_bin(target="test.dat", destination="testcompare.txt"):
     pickling_on = open(target, "rb")
     huffman_integer = pickle.load(pickling_on)
     bit_dict = pickle.load(pickling_on)
@@ -44,9 +37,29 @@ def read_bin(target="test.pickle", destination="testcompare.txt"):
     new_file = open(destination, "w")
     new_file.write(file)
     new_file.close()
-    
 
-start = timer()
-read_bin()
-end = timer()
-print("\nruntime: {:.2f}s".format(end - start))
+
+def main(argv):
+    target = ""
+    destination = ""
+    try:
+        opts, args = getopt.getopt(argv,"ht:d:",["tfile=","dfile="])
+    except getopt.GetoptError:
+        print("compress.py -t <targetfile> -d <destinationfile>")
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print("compress.py -t <targetfile> -d <destinationfile>")
+            sys.exit()
+        elif opt in ("-t", "--tfile"):
+            targetfile = arg
+        elif opt in ("-d", "--dfile"):
+            destinationfile = arg
+    start = timer()
+    read_bin(targetfile, destinationfile)
+    end = timer()
+    print("\nruntime: {:.2f}s".format(end - start))
+
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
