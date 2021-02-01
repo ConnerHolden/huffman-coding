@@ -2,7 +2,8 @@
 
 [*Introduction*](#introduction)  
 [*What is Huffman Coding?*](#what-is-huffman-coding?)  
-[*Usage*](#usage) 
+[*Usage*](#usage)  
+[*Known Issues*](#known-issues)
 
 ## Introduction
 
@@ -25,3 +26,6 @@ Navigate to the directory of the file you want to compress.
 
 Compress: `python compress.py -t <targetfile> -d <destinationfile>`  
 Decompress: `python decompress.py -t <targetfile> -d <destinationfile>`
+
+## Known Issues
+Decompression takes much longer than compression!
