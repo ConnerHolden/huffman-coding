@@ -1,11 +1,14 @@
 # Table of Contents
 
 [*Introduction*](#introduction)  
-[*What is Huffman Coding?*](#what-is-huffman-coding?)
+[*What is Huffman Coding?*](#what-is-huffman-coding?)  
+[*Usage*](#usage) 
 
 ## Introduction
 
-This is a Huffman Coding project for learning Python using Bhrigu Srivastava's [demo](https://github.com/bhrigu123/huffman-coding).
+This is a Huffman Coding project for learning Python using Bhrigu Srivastava's [demo](https://github.com/bhrigu123/huffman-coding). 
+
+[*compress.py*](https://github.com/ConnerHolden/huffman-coding/blob/master/compress.py) and [*decompress.py*](https://github.com/ConnerHolden/huffman-coding/blob/master/decompress.py) are both naive implementations of the Huffman Coding algorithm that were written before working through the demo.
 
 ## What is Huffman Coding?
 
@@ -16,3 +19,9 @@ The first step is to build a Huffman tree. The frequency of each character must 
 The next step is to assign a bit value to each *path* between nodes in the tree. Each parent node has two paths (one per child node). For every parent node, one path is assigned "0" and the other "1" until the entire tree has been traversed. In the end, the path to each child from a parent should have a bit value assigned to it. The code for any given character is the concatenation of the bit values for the path taken from the root node to the character node itself.
 
 This process yields codes where no two share the same prefixes and where the smallest of these are assigned to the most frequently occuring characters. This new compressed file will be smaller than the original. It is decompressed by reading the bits, replacing a code with its character as soon as a valid code is encountered.
+
+## Usage
+Navigate to the directory of the file you want to compress.
+
+Compress: `python compress.py -t <targetfile> -d <destinationfile>`  
+Decompress: `python decompress.py -t <targetfile> -d <destinationfile>`
