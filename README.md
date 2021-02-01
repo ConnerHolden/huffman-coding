@@ -24,8 +24,11 @@ This process yields codes where no two share the same prefixes and where the sma
 ## Usage
 Navigate to the directory of the file you want to compress.
 
-Compress: `python compress.py -t <targetfile> -d <destinationfile>`  
-Decompress: `python decompress.py -t <targetfile> -d <destinationfile>`
+Compress:    
+`python compress.py -t <targetfile> -d <destinationfile>`
+
+Decompress:    
+`python decompress.py -t <targetfile> -d <destinationfile>`
 
 Example:  
 `python compress.py -t test.txt -d test.dat`   
