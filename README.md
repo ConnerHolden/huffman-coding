@@ -27,5 +27,9 @@ Navigate to the directory of the file you want to compress.
 Compress: `python compress.py -t <targetfile> -d <destinationfile>`  
 Decompress: `python decompress.py -t <targetfile> -d <destinationfile>`
 
+Example:  
+`python compress.py -t test.txt -d test.dat`   
+`python decompress.py -t test.dat -d test_compare.txt`
+
 ## Known Issues
 Decompression takes much longer than compression!
