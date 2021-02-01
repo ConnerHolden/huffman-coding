@@ -3,7 +3,7 @@ import pickle
 import time
 from os import system
 from sys import getsizeof
-import timeit
+from timeit import default_timer as timer
 import sys
 
 
@@ -235,15 +235,18 @@ def return_huffman_integer(target):
                 file[index] = value
                 break
         if index % 1000 == 0:
-            completion = 100 * index / len(file)
-            print("{:.3f}% ({}/{})".format(completion, index, len(file)))
+            completion = int(20 * index / len(file))
+            readout = "\r[%s%s]" % ("▯" * completion, " " * (20 - completion)) + " ({}/{}) {:.2f}%".format(index, len(file), 100 * index / len(file))
+            sys.stdout.write(readout)
+            sys.stdout.flush()
             time.sleep(0.001)
-        # if index % 20 == 0:
-        #     completion = int(20 * index / len(file))
-        #     sys.stdout.write("\r[%s%s]" % ("#" * completion, " " * (20 - completion)))
-        #     sys.stdout.flush()
-    file = "".join(file)
+    time.sleep(0.1)
+    sys.stdout.write("\r[%s%s]" % ("▯" * 20, " " * 0) + " ({}/{}) 100.00%".format(len(file), len(file)))
+    sys.stdout.flush()
+    file = "1" + "".join(file)
     huffman_integer = int(file, 2)
+    bin_int = int(file, 2)
+    bin_str = bin(bin_int)
     return huffman_integer
 
 
@@ -257,4 +260,7 @@ def write_bin(target="test.txt", destination="test.pickle"):
     pickling_on.close()
 
 
+start = timer()
 write_bin("test.txt")
+end = timer()
+print("\nruntime: {:.2f}s".format(end - start))
